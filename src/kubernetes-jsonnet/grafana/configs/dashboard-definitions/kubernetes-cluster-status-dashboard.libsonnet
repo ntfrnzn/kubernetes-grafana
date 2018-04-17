@@ -28,7 +28,7 @@ local controlPlaneStatusRow = row.new()
 local cpuUtilization = gauge.new("CPU Utilization", 'sum(100 - (avg by (instance) (rate(node_cpu{job="node-exporter",mode="idle"}[5m])) * 100)) / count(node_cpu{job="node-exporter",mode="idle"})').withLowerBeingBetter();
 local memoryUtilization = gauge.new("Memory Utilization", '((sum(node_memory_MemTotal) - sum(node_memory_MemFree) - sum(node_memory_Buffers) - sum(node_memory_Cached)) / sum(node_memory_MemTotal)) * 100').withLowerBeingBetter();
 local filesystemUtilization = gauge.new("Filesystem Utilization", '(sum(node_filesystem_size{device!="rootfs"}) - sum(node_filesystem_free{device!="rootfs"})) / sum(node_filesystem_size{device!="rootfs"})').withLowerBeingBetter();
-local podUtilization = gauge.new("Pod Utilization", '100 - (sum(kube_node_status_capacity_pods) - sum(kube_pod_info)) / sum(kube_node_status_capacity_pods) * 100').withLowerBeingBetter();
+local podUtilization = gauge.new("Pod Utilization", '100 - (sum(kube_node_status_capacity_pods) - sum(kube_pod_status_phase{phase="Running")) / sum(kube_node_status_capacity_pods) * 100').withLowerBeingBetter();
 
 local capacityPlanningRow = row.new()
     .addPanel(cpuUtilization)
